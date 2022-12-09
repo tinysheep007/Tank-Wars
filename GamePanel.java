@@ -28,7 +28,7 @@ public class GamePanel extends JFrame {
 
     // change this to increase or decrease bot count
     // max amount of bot
-    int botMaxCount = 3;
+    int botMaxCount = 10;
 
     // amount of bot
     int botCount = 0;
@@ -52,6 +52,7 @@ public class GamePanel extends JFrame {
     ArrayList<Wall> wallList = new ArrayList<Wall>();
     ArrayList<Base> baseList = new ArrayList<Base>();
     ArrayList<Blast> blastList = new ArrayList<Blast>();
+
     // start game
     public void launch() {
         // title
@@ -165,7 +166,7 @@ public class GamePanel extends JFrame {
             for (Base b : baseList) {
                 b.paintSelf(tempScreenPen);
             }
-            for (Blast b : blastList ){
+            for (Blast b : blastList) {
                 b.paintSelf(tempScreenPen);
             }
             // increase render count
@@ -212,7 +213,7 @@ public class GamePanel extends JFrame {
                     state = stateTemp;
                     playerList.add(p1);
                     p1.alive = true;
-                    if(state == 2){
+                    if (state == 2) {
                         playerList.add(p2);
                         p2.alive = true;
                     }

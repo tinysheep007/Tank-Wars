@@ -2,11 +2,11 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class PlayerTwo extends Tank{
+public class PlayerTwo extends Tank {
     public PlayerTwo(String img, int x, int y, GamePanel gamePanel, String upimg, String downimg, String leftimg,
             String rightimg) {
         super(img, x, y, gamePanel, upimg, downimg, leftimg, rightimg);
-        
+
     }
 
     boolean up = false;
@@ -14,9 +14,9 @@ public class PlayerTwo extends Tank{
     boolean left = false;
     boolean right = false;
 
-    public void keyPressed(KeyEvent e){
+    public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        switch(key){
+        switch (key) {
             case KeyEvent.VK_I:
                 // System.out.println("pressed up");
                 up = true;
@@ -38,9 +38,9 @@ public class PlayerTwo extends Tank{
         }
     }
 
-    public void keyReleased(KeyEvent e){
+    public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        switch(key){
+        switch (key) {
             case KeyEvent.VK_I:
                 // System.out.println("released up");
                 up = false;
@@ -59,31 +59,27 @@ public class PlayerTwo extends Tank{
         }
     }
 
-
-    public void move(){
-        if(left){
+    public void move() {
+        if (left) {
             leftward();
-        }
-        else if(right){
+        } else if (right) {
             rightward();
-        }
-        else if(up){
+        } else if (up) {
             upward();
-        }
-        else if(down){
+        } else if (down) {
             downward();
         }
     }
 
     @Override
-    public void paintSelf(Graphics g){
+    public void paintSelf(Graphics g) {
         // img = img.getScaledInstance(10, 10, Image.SCALE_DEFAULT);
         g.drawImage(img, x, y, null);
         move();
     }
-    
+
     @Override
-    public Rectangle getRec(){
-        return new Rectangle(x,y, width, height);
+    public Rectangle getRec() {
+        return new Rectangle(x, y, width, height);
     }
 }

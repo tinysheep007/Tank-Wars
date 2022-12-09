@@ -5,12 +5,12 @@ import java.util.ArrayList;
 
 public class Bullet extends GameObject {
 
-    //size
+    // size
     int width = 10;
     int height = 10;
-    //speed
+    // speed
     int speed = 7;
-    //direction
+    // direction
     Direction direction;
 
     public Bullet(String img, int x, int y, GamePanel gamePanel, Direction direction) {
@@ -18,24 +18,24 @@ public class Bullet extends GameObject {
         this.direction = direction;
     }
 
-    public void leftward(){
-        this.x -= speed ; 
+    public void leftward() {
+        this.x -= speed;
     }
 
-    public void rightward(){
+    public void rightward() {
         this.x += speed;
     }
 
-    public void upward(){
+    public void upward() {
         this.y -= speed;
     }
 
-    public void downward(){
+    public void downward() {
         this.y += speed;
     }
 
-    public void go(){
-        switch(direction){
+    public void go() {
+        switch (direction) {
             case UP:
                 upward();
                 break;
@@ -52,36 +52,36 @@ public class Bullet extends GameObject {
         this.hitwall();
         this.moveToBorder();
         this.hitbase();
-    }   
+    }
 
-    //if off border delete the bullet
-    public void moveToBorder(){
-        if(x < 0){
+    // if off border delete the bullet
+    public void moveToBorder() {
+        if (x < 0) {
             this.gamePanel.removeList.add(this);
-        }else if( x + width > this.gamePanel.getWidth()){
+        } else if (x + width > this.gamePanel.getWidth()) {
             this.gamePanel.removeList.add(this);
-        }else if(y < 0){
+        } else if (y < 0) {
             this.gamePanel.removeList.add(this);
-        }else if( y + height > this.gamePanel.getHeight()){
+        } else if (y + height > this.gamePanel.getHeight()) {
             this.gamePanel.removeList.add(this);
         }
     }
 
-    public void hitwall(){
+    public void hitwall() {
         ArrayList<Wall> walls = this.gamePanel.wallList;
-        for(Wall w : walls){
-            if(this.getRec().intersects(w.getRec())){
-                this.gamePanel.wallList.remove(w); 
+        for (Wall w : walls) {
+            if (this.getRec().intersects(w.getRec())) {
+                this.gamePanel.wallList.remove(w);
                 this.gamePanel.removeList.add(this);
                 break;
             }
         }
     }
 
-    public void hitbase(){
+    public void hitbase() {
         ArrayList<Base> bases = this.gamePanel.baseList;
-        for(Base b : bases){
-            if(this.getRec().intersects(b.getRec())){
+        for (Base b : bases) {
+            if (this.getRec().intersects(b.getRec())) {
                 this.gamePanel.baseList.remove(b);
                 this.gamePanel.removeList.add(this);
                 break;
@@ -89,13 +89,13 @@ public class Bullet extends GameObject {
         }
     }
 
-    public void hitbot(){
+    public void hitbot() {
         ArrayList<Bot> bots = this.gamePanel.botList;
         // ArrayList<Tank> players = this.gamePanel.playerList;
-        for(Bot b : bots){
-            if(this.getRec().intersects(b.getRec())){
-                // this.gamePanel.blastList.add(new Blast("", b.x-30, b.y-15, this.gamePanel));
-                this.gamePanel.botList.remove(b); 
+        for (Bot b : bots) {
+            if (this.getRec().intersects(b.getRec())) {
+                this.gamePanel.blastList.add(new Blast("", b.x - 30, b.y - 15, this.gamePanel));
+                this.gamePanel.botList.remove(b);
                 this.gamePanel.removeList.add(this);
                 break;
             }
@@ -103,15 +103,15 @@ public class Bullet extends GameObject {
     }
 
     @Override
-    public void paintSelf(Graphics g){
+    public void paintSelf(Graphics g) {
         this.go();
         this.hitbot();
         g.drawImage(img, x, y, null);
     }
 
     @Override
-    public Rectangle getRec(){
-        return new Rectangle(x,y, width, height);
+    public Rectangle getRec() {
+        return new Rectangle(x, y, width, height);
     }
-    
+
 }
