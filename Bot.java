@@ -35,7 +35,7 @@ public class Bot extends Tank {
         Point p = getHeadPoint();
         Random r = new Random();
         int num = r.nextInt(300);
-        if(num < 15){
+        if(num < 10){
             this.gamePanel.bulletList.add(new BotBullet("images/BotBullet.png", p.x, p.y, this.gamePanel, direction));
         }
     }

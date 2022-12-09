@@ -17,10 +17,17 @@ public class GamePanel extends JFrame {
             Image.SCALE_DEFAULT);
 
     // select game mode
+    // 1 single player
+    // 2 double player 
+    // 3 game paused (pressed 3 to pause)
+    // 5 game victory
     int state = 0;
 
     // int state temp
     int stateTemp = 0;
+
+    //max amount of bot
+    int botMaxCount = 1;
 
     //amount of bot
     int botCount = 0;
@@ -38,6 +45,8 @@ public class GamePanel extends JFrame {
     ArrayList<Bot> botList = new ArrayList<Bot>();
     ArrayList<Bullet> removeList = new ArrayList<Bullet>();
     ArrayList<Tank> playerList = new ArrayList<Tank>();
+    ArrayList<Wall> wallList = new ArrayList<Wall>();
+    ArrayList<Base> baseList = new ArrayList<Base>();
     // start game
     public void launch() {
         // title
@@ -54,10 +63,33 @@ public class GamePanel extends JFrame {
         setVisible(true);
         // add event listener
         this.addKeyListener(new GamePanel.KeyMointor());
+
+        //add walls
+        for(int i=0;i<16;i++){
+            wallList.add(new Wall("images/Wall-Regular.png", i*50, 150, this));
+        }
+        wallList.add(new Wall("images/Wall-Regular.png", 300, 500, this));
+        wallList.add(new Wall("images/Wall-Regular.png", 300, 550, this));
+        wallList.add(new Wall("images/Wall-Regular.png", 350, 500, this));
+        wallList.add(new Wall("images/Wall-Regular.png", 400, 500, this));
+        wallList.add(new Wall("images/Wall-Regular.png", 400, 550, this));
+
+        //add base
+        baseList.add(new Base("images/Base.png", 350, 550, this));
+
         // redraw the screen
+        
         while (true) {
-            //add bots only after 100 render
-            if(renderCount % 100 == 1 && botCount < 5){
+            //check if game win
+            if(botCount == botMaxCount && botList.size()==0){
+                state = 5;
+            }
+            //check if game end
+            if((playerList.size() == 0 && (state == 1 || state == 2)) || baseList.size() == 0){
+                state = 4;
+            }
+            //add bots only after 100 render and game is not paused
+            if(renderCount % 100 == 1 && botCount < botMaxCount && (state == 1 || state == 2)){
                 Random r = new Random();
                 int rnum = r.nextInt(800);
                 botList.add(new Bot("images/Bot-Up.png", rnum, 100, this,"images/Bot-Up.png","images/Bot-Down.png","images/Bot-Left.png","images/Bot-Right.png"));
@@ -77,6 +109,7 @@ public class GamePanel extends JFrame {
 
     @Override
     public void paint(Graphics g) {
+        // System.out.println(bulletList.size());
         // set temp screen
         if (tempScreen == null) {
             tempScreen = this.createImage(width, height);
@@ -93,7 +126,6 @@ public class GamePanel extends JFrame {
         // change fond and size
         tempScreenPen.setFont(new Font("times new roman", Font.BOLD, 50));
         // draw the string on screen
-
         // game not started yet
         if (state == 0) {
             tempScreenPen.drawString("Tank Wars", 220, 100);
@@ -119,17 +151,32 @@ public class GamePanel extends JFrame {
             for(Bot b : botList){
                 b.paintSelf(tempScreenPen);
             }
+            //remove all disappearing bullet
             bulletList.removeAll(removeList);
             for(Bullet b : bulletList){
                 b.paintSelf(tempScreenPen);
             }
-
+            for(Wall w : wallList){
+                w.paintSelf(tempScreenPen);
+            }
+            for(Base b : baseList ){
+                b.paintSelf(tempScreenPen);
+            }
             //increase render count
             renderCount++;
 
         }
+        else if(state == 3){
+            tempScreenPen.drawString("Game Paused", 220, 100);
+        }
+        else if(state == 4){
+            tempScreenPen.drawString("Game Lose", 220, 100);
+        }
+        else if(state == 5){
+            tempScreenPen.drawString("Game Won", 220, 100);
+        }
         g.drawImage(tempScreen, 0, 0, null);
-
+        
     }
 
     class KeyMointor extends KeyAdapter {
@@ -139,6 +186,17 @@ public class GamePanel extends JFrame {
             // System.out.println(e.getKeyChar());
             int key = e.getKeyChar();
             switch (key) {
+                case KeyEvent.VK_3:
+                    if(state != 3){
+                        stateTemp = state;
+                        state = 3;
+                    }else{
+                        state = stateTemp;
+                        if(stateTemp == 0){
+                            stateTemp = 1;
+                        }
+                    }
+                    break;
                 case KeyEvent.VK_1:
                     stateTemp = 1;
                     y = 150;

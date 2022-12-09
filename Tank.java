@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public abstract class Tank extends GameObject{
     // size
@@ -35,7 +36,7 @@ public abstract class Tank extends GameObject{
     public void attack(){
         if (attackCD){
             Point p = getHeadPoint();
-            Bullet bullet = new Bullet("images/cs50ball-small.png", p.x, p.y, this.gamePanel, this.direction);
+            Bullet bullet = new Bullet("images/cs50ball-small (2).png", p.x, p.y, this.gamePanel, this.direction);
             this.gamePanel.bulletList.add(bullet);
             // start thread
             new AttackCD().start();
@@ -60,6 +61,35 @@ public abstract class Tank extends GameObject{
         }
     }
 
+    //(x,y) is coordinate for tank's next move
+    //return true if it does hit wall
+    //return false if it does not hit wall
+    public boolean hitwall(int x, int y){
+        ArrayList<Wall> walls = this.gamePanel.wallList;
+        Rectangle next = new Rectangle(x, y, width, height);
+        for(Wall w : walls){
+            if(next.intersects(w.getRec())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //if the tank is going off the border, return true else false
+    public boolean moveToBorder(int x, int y){
+        //left
+        if(x < 0){
+            return true;
+        }else if( x + width > this.gamePanel.getWidth()){
+            return true;
+        }else if(y < 0){
+            return true;
+        }else if( y + height > this.gamePanel.getHeight()){
+            return true;
+        }
+        return false;
+    }
+
     public Point getHeadPoint(){
         switch(direction){
             case UP:
@@ -79,25 +109,33 @@ public abstract class Tank extends GameObject{
     public void leftward(){
         direction = Direction.LEFT;
         setimg(this.leftimg);
-        this.x -= speed;
+        if(!hitwall(x-speed, y) && !moveToBorder(x-speed, y)){
+            this.x -= speed;
+        }
     }
 
     public void rightward(){
         direction = Direction.RIGHT;
         setimg(this.rightimg);
-        this.x += speed;
+        if(!hitwall(x+speed, y) && !moveToBorder(x+speed, y)){
+            this.x += speed;
+        }
     }
 
     public void upward(){
         direction = Direction.UP;
         setimg(this.upimg);
-        this.y -= speed;
+        if(!hitwall(x, y-speed) && !moveToBorder(x, y-speed)){
+            this.y -= speed;
+        }
     }
 
     public void downward(){
         direction = Direction.DOWN;
         setimg(this.downimg);
-        this.y += speed;
+        if(!hitwall(x, y+speed) && !moveToBorder(x, y+speed)){
+            this.y += speed;
+        }
     }
 
 

@@ -49,9 +49,47 @@ public class Bullet extends GameObject {
                 rightward();
                 break;
         }
+        this.hitwall();
+        this.moveToBorder();
+        this.hitbase();
+    }   
+
+    //if off border delete the bullet
+    public void moveToBorder(){
+        if(x < 0){
+            this.gamePanel.removeList.add(this);
+        }else if( x + width > this.gamePanel.getWidth()){
+            this.gamePanel.removeList.add(this);
+        }else if(y < 0){
+            this.gamePanel.removeList.add(this);
+        }else if( y + height > this.gamePanel.getHeight()){
+            this.gamePanel.removeList.add(this);
+        }
     }
 
-    public void hitbox(){
+    public void hitwall(){
+        ArrayList<Wall> walls = this.gamePanel.wallList;
+        for(Wall w : walls){
+            if(this.getRec().intersects(w.getRec())){
+                this.gamePanel.wallList.remove(w); 
+                this.gamePanel.removeList.add(this);
+                break;
+            }
+        }
+    }
+
+    public void hitbase(){
+        ArrayList<Base> bases = this.gamePanel.baseList;
+        for(Base b : bases){
+            if(this.getRec().intersects(b.getRec())){
+                this.gamePanel.baseList.remove(b);
+                this.gamePanel.removeList.add(this);
+                break;
+            }
+        }
+    }
+
+    public void hitbot(){
         ArrayList<Bot> bots = this.gamePanel.botList;
         for(Bot b : bots){
             if(this.getRec().intersects(b.getRec())){
@@ -64,9 +102,9 @@ public class Bullet extends GameObject {
 
     @Override
     public void paintSelf(Graphics g){
-        g.drawImage(img, x, y, null);
         this.go();
-        this.hitbox();
+        this.hitbot();
+        g.drawImage(img, x, y, null);
     }
 
     @Override
