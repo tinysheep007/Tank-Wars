@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GamePanel extends JFrame {
     // set empty screen
@@ -21,6 +22,12 @@ public class GamePanel extends JFrame {
     // int state temp
     int stateTemp = 0;
 
+    //amount of bot
+    int botCount = 0;
+
+    //amount of times that screen render
+    int renderCount = 0;
+
     // the location of the Select cursor
     int y = 150;
     PlayerOne p1 = new PlayerOne("images/P1-Up.png", 125, 510, this, "images/P1-Up.png", "images/P1-Down.png",
@@ -28,7 +35,9 @@ public class GamePanel extends JFrame {
 
     //game componenents
     ArrayList<Bullet> bulletList = new ArrayList<Bullet>();
-
+    ArrayList<Bot> botList = new ArrayList<Bot>();
+    ArrayList<Bullet> removeList = new ArrayList<Bullet>();
+    ArrayList<Tank> playerList = new ArrayList<Tank>();
     // start game
     public void launch() {
         // title
@@ -47,6 +56,16 @@ public class GamePanel extends JFrame {
         this.addKeyListener(new GamePanel.KeyMointor());
         // redraw the screen
         while (true) {
+            //add bots only after 100 render
+            if(renderCount % 100 == 1 && botCount < 5){
+                Random r = new Random();
+                int rnum = r.nextInt(800);
+                botList.add(new Bot("images/Bot-Up.png", rnum, 100, this,"images/Bot-Up.png","images/Bot-Down.png","images/Bot-Left.png","images/Bot-Right.png"));
+                botCount++;
+            }
+            
+           
+            //update graphics
             repaint();
             try {
                 Thread.sleep(25);
@@ -94,10 +113,19 @@ public class GamePanel extends JFrame {
             }
 
             // add game components
-            p1.paintSelf(tempScreenPen);
+            for(Tank player : playerList){
+                player.paintSelf(tempScreenPen);
+            }
+            for(Bot b : botList){
+                b.paintSelf(tempScreenPen);
+            }
+            bulletList.removeAll(removeList);
             for(Bullet b : bulletList){
                 b.paintSelf(tempScreenPen);
             }
+
+            //increase render count
+            renderCount++;
 
         }
         g.drawImage(tempScreen, 0, 0, null);
@@ -121,6 +149,7 @@ public class GamePanel extends JFrame {
                     break;
                 case KeyEvent.VK_ENTER:
                     state = stateTemp;
+                    playerList.add(p1);
                     break;
                 default:
                     p1.keyPressed(e);

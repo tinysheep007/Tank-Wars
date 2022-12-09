@@ -9,7 +9,7 @@ public abstract class Tank extends GameObject{
     //speed
     private int speed = 3;
     //direction
-    private Direction direction = Direction.UP;
+    public Direction direction = Direction.UP;
 
     //pic
     private String upimg;
@@ -78,25 +78,25 @@ public abstract class Tank extends GameObject{
 
     public void leftward(){
         direction = Direction.LEFT;
-        setimg("images/P1-Left.png");
+        setimg(this.leftimg);
         this.x -= speed;
     }
 
     public void rightward(){
         direction = Direction.RIGHT;
-        setimg("images/P1-Right.png");
+        setimg(this.rightimg);
         this.x += speed;
     }
 
     public void upward(){
         direction = Direction.UP;
-        setimg("images/P1-Up.png");
+        setimg(this.upimg);
         this.y -= speed;
     }
 
     public void downward(){
         direction = Direction.DOWN;
-        setimg("images/P1-Down.png");
+        setimg(this.downimg);
         this.y += speed;
     }
 

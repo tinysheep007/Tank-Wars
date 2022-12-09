@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Bullet extends GameObject {
 
@@ -50,10 +51,22 @@ public class Bullet extends GameObject {
         }
     }
 
+    public void hitbox(){
+        ArrayList<Bot> bots = this.gamePanel.botList;
+        for(Bot b : bots){
+            if(this.getRec().intersects(b.getRec())){
+                this.gamePanel.botList.remove(b); 
+                this.gamePanel.removeList.add(this);
+                break;
+            }
+        }
+    }
+
     @Override
     public void paintSelf(Graphics g){
         g.drawImage(img, x, y, null);
         this.go();
+        this.hitbox();
     }
 
     @Override
