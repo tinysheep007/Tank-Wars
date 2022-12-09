@@ -14,7 +14,9 @@ public class BotBullet extends Bullet{
         ArrayList<Tank> players = this.gamePanel.playerList;
         for(Tank p : players){
             if(this.getRec().intersects(p.getRec())){
+                // this.gamePanel.blastList.add(new Blast("", p.x-30, p.y-15, this.gamePanel));
                 this.gamePanel.playerList.remove(p); 
+                p.alive = false;
                 this.gamePanel.removeList.add(this);
                 break;
             }

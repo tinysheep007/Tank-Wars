@@ -91,8 +91,10 @@ public class Bullet extends GameObject {
 
     public void hitbot(){
         ArrayList<Bot> bots = this.gamePanel.botList;
+        // ArrayList<Tank> players = this.gamePanel.playerList;
         for(Bot b : bots){
             if(this.getRec().intersects(b.getRec())){
+                // this.gamePanel.blastList.add(new Blast("", b.x-30, b.y-15, this.gamePanel));
                 this.gamePanel.botList.remove(b); 
                 this.gamePanel.removeList.add(this);
                 break;

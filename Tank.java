@@ -11,6 +11,8 @@ public abstract class Tank extends GameObject{
     private int speed = 3;
     //direction
     public Direction direction = Direction.UP;
+    //alive
+    public boolean alive = false;
 
     //pic
     private String upimg;
@@ -34,7 +36,7 @@ public abstract class Tank extends GameObject{
     }
     
     public void attack(){
-        if (attackCD){
+        if (attackCD && alive){
             Point p = getHeadPoint();
             Bullet bullet = new Bullet("images/cs50ball-small (2).png", p.x, p.y, this.gamePanel, this.direction);
             this.gamePanel.bulletList.add(bullet);
