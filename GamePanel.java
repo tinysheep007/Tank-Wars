@@ -80,6 +80,12 @@ public class GamePanel extends JFrame {
         wallList.add(new Wall("images/Wall-Regular.png", 400, 500, this));
         wallList.add(new Wall("images/Wall-Regular.png", 400, 550, this));
 
+        wallList.add(new Wall("images/Wall-Regular.png", 150, 300, this));
+        wallList.add(new Wall("images/Wall-Regular.png", 200, 300, this));
+
+        wallList.add(new Wall("images/Wall-Regular.png", 350, 300, this));
+        wallList.add(new Wall("images/Wall-Regular.png", 300, 300, this));
+
         // add base
         baseList.add(new Base("images/Base.png", 350, 550, this));
 
